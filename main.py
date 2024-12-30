@@ -1,31 +1,22 @@
+import json
+from scraper.config import (
+    URL_ISTYLE, 
+    XPATH_PRODUCT_ITEM_ISTYLE, 
+    XPATH_PRODUCT_NAME_ISTYLE, 
+    XPATH_PRODUCT_PRICE_ISTYLE,
+    XPATH_COOKIES_BUTTON_ISTYLE
+)
+from scraper.scraper import scrape
+    
+def load_data_from_json(file_path):
+    """Načte data ze souboru JSON."""
+    with open(file_path, "r", encoding="utf-8") as file:
+        return json.load(file)
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-
-web = 'https://istyle.cz/mac/macbook-air.html'
-path = './chromedriver/chromedriver' 
-service = Service(executable_path=path)
-
-# Nastavení prohlížeče s loggingem
-chrome_options = Options()
-#chrome_options.add_argument("--headless")  # Pokud chcete spustit Chrome bez UI (headless mód)
-
-# Vytvoření webového ovladače
-driver = webdriver.Chrome(service=service, options=chrome_options)
-
-# Otevření webu
-driver.get(web)
-
-products = driver.find_elements(by='xpath', value='//div[contains(@class, "ais-hits--item")]')
-
-for product in products:
-    print(product.find_element(by='xpath', value='.//div[contains(@class, "product-item-name")]').text)
-    print(product.find_element(by='xpath', value='.//div[contains(@class, "special-price")]').text)
-
-
-# Zpoždění pro prohlédnutí stránky
-#time.sleep(20)  # Počká 10 sekund než se zavře
-
-# Zavření prohlížeče
-driver.quit()
+if __name__ == "__main__":
+    scrape(URL_ISTYLE, XPATH_PRODUCT_ITEM_ISTYLE, XPATH_PRODUCT_NAME_ISTYLE, XPATH_PRODUCT_PRICE_ISTYLE, XPATH_COOKIES_BUTTON_ISTYLE)
+    data = load_data_from_json("data/data.json")
+    
+    for item in data:
+        print(f"Název produktu: {item['name']}, Cena: {item['price']}")
+    
