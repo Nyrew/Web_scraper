@@ -1,11 +1,5 @@
 import json
-from scraper.config import (
-    URL_ISTYLE, 
-    XPATH_PRODUCT_ITEM_ISTYLE, 
-    XPATH_PRODUCT_NAME_ISTYLE, 
-    XPATH_PRODUCT_PRICE_ISTYLE,
-    XPATH_COOKIES_BUTTON_ISTYLE
-)
+from scraper.config import *
 from scraper.scraper import scrape
     
 def load_data_from_json(file_path):
@@ -14,9 +8,10 @@ def load_data_from_json(file_path):
         return json.load(file)
 
 if __name__ == "__main__":
-    scrape(URL_ISTYLE, XPATH_PRODUCT_ITEM_ISTYLE, XPATH_PRODUCT_NAME_ISTYLE, XPATH_PRODUCT_PRICE_ISTYLE, XPATH_COOKIES_BUTTON_ISTYLE)
-    data = load_data_from_json("data/data.json")
+    scrape(URL_ISTYLE, XPATH_PRODUCT_NAME_ISTYLE, XPATH_PRODUCT_PRICE_ISTYLE, XPATH_COOKIES_BUTTON_ISTYLE)
+    scrape(URL_ALZA, XPATH_PRODUCT_NAME_ALZA, XPATH_PRODUCT_PRICE_ALZA)
+    #data = load_data_from_json("data/data.json")
     
-    for item in data:
-        print(f"Název produktu: {item['name']}, Cena: {item['price']}")
+    #for item in data:
+    #    print(f"Obchod: {item['shop']}, Název produktu: {item['name']}, Cena: {item['price']}")
     
