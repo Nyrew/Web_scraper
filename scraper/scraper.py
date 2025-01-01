@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 CHROMEDRIVER_PATH = "./chromedriver/chromedriver"
 
 def scrape(
-    urls: list, 
+    configs: list, 
     xpath_product_name: str, 
     xpath_product_price: str, 
     xpath_cookies_button: str = None)  -> list:
@@ -43,9 +43,9 @@ def scrape(
     
     driver = webdriver.Chrome(service=service, options=chrome_options)   
 
-    for url in urls:
+    for config in configs:
         try:
-            driver.get(url)
+            driver.get(config['url'])
             wait = WebDriverWait(driver, 2)
             if xpath_cookies_button and not cookie_clicked:
                 try:
@@ -71,8 +71,7 @@ def scrape(
             
             data.append({
                 "name": name,
-                "price": price,
-                "url": url
+                "price": price
             })
             
         except Exception as e:
