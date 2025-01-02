@@ -5,8 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-#from .config import URL, XPATH_PRODUCT_ITEM, XPATH_PRODUCT_NAME, XPATH_PRODUCT_PRICE
-
 CHROMEDRIVER_PATH = "./chromedriver/chromedriver"
 
 def scrape(
@@ -15,19 +13,19 @@ def scrape(
     xpath_product_price: str, 
     xpath_cookies_button: str = None)  -> list:
     """
-    Scrapes product information from given URLs using Selenium WebDriver.
+    Scrapes product information from Alza using provided configuration.
     
     Args:
-        urls (list): List of URLs to scrape from
-        xpath_product_name (str): XPath expression to locate product name element
-        xpath_product_price (str): XPath expression to locate product price element
-        xpath_cookies_button (str, optional): XPath expression for cookies accept button. Defaults to None
+        configs (list): List of dictionaries containing product configurations
+        xpath_name (str): XPath for product name element
+        xpath_price (str): XPath for product price element
+        xpath_cookies (str, optional): XPath for cookies button
         
     Returns:
-        list: List of dictionaries containing scraped product data (name, price, url)
+        list: List of dictionaries containing scraped data with specifications
     """
     
-    data: list = []
+    updated_configs: list = configs.copy()
     cookie_clicked: bool = False
     
     service = Service(executable_path=CHROMEDRIVER_PATH)
@@ -43,7 +41,7 @@ def scrape(
     
     driver = webdriver.Chrome(service=service, options=chrome_options)   
 
-    for config in configs:
+    for config in updated_configs:
         try:
             driver.get(config['url'])
             wait = WebDriverWait(driver, 2)
@@ -61,21 +59,18 @@ def scrape(
             name = wait.until(
                 EC.presence_of_element_located((By.XPATH, xpath_product_name))
             ).text
-            print(f"Product name: {name}")
+            #print(f"Product name: {name}")
         
             # Get product price
             price = wait.until(
                 EC.presence_of_element_located((By.XPATH, xpath_product_price))
             ).text
-            print(f"Product price: {price}")
+            #print(f"Product price: {price}")
             
-            data.append({
-                "name": name,
-                "price": price
-            })
+            config['price'] = price.replace(',-', '')
             
         except Exception as e:
             print(f"Error occurred while scraping: {e}")
     
     driver.quit()
-    return data
+    return updated_configs    
