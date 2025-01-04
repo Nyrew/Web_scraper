@@ -1,31 +1,39 @@
+from scraper.config import *
+from scraper.scraper import scrape
+from database.database import get_db
+from database.crud import save_scraped_data, get_all_data, delete_all_products
+from database.database import engine
+from database.models import Base
+from server.app import app
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+def create_dtb():
+    Base.metadata.create_all(engine)
 
-web = 'https://istyle.cz/mac/macbook-air.html'
-path = './chromedriver/chromedriver' 
-service = Service(executable_path=path)
+def print_all():
+    db = next(get_db())
+    x = get_all_data(db)
+    for row in x:
+        print(row)
 
-# Nastavení prohlížeče s loggingem
-chrome_options = Options()
-#chrome_options.add_argument("--headless")  # Pokud chcete spustit Chrome bez UI (headless mód)
+def main():
+    db = next(get_db())
+    scraped_data_istyle = scrape(CONFIG_ISTYLE, XPATH_PRODUCT_NAME_ISTYLE, XPATH_PRODUCT_PRICE_ISTYLE, XPATH_COOKIES_BUTTON_ISTYLE)
+    scraped_data_alza = scrape(CONFIG_ALZA, XPATH_PRODUCT_NAME_ALZA, XPATH_PRODUCT_PRICE_ALZA)
+    print("Scrape done!!")
+    for item in scraped_data_istyle, scraped_data_alza:
+        save_scraped_data(db, item)
+    print("Data byla úspěšně uložena do databáze.")
 
-# Vytvoření webového ovladače
-driver = webdriver.Chrome(service=service, options=chrome_options)
-
-# Otevření webu
-driver.get(web)
-
-products = driver.find_elements(by='xpath', value='//div[contains(@class, "ais-hits--item")]')
-
-for product in products:
-    print(product.find_element(by='xpath', value='.//div[contains(@class, "product-item-name")]').text)
-    print(product.find_element(by='xpath', value='.//div[contains(@class, "special-price")]').text)
-
-
-# Zpoždění pro prohlédnutí stránky
-#time.sleep(20)  # Počká 10 sekund než se zavře
-
-# Zavření prohlížeče
-driver.quit()
+if __name__ == "__main__":   
+    #delete_all_products(next(get_db()))
+    # main()
+    # crea
+    # te_dtb()
+    # main() 
+    print_all()
+    app.run(debug=True)
+    #results_istyle = scrape(CONFIG_ISTYLE, XPATH_PRODUCT_NAME_ISTYLE, XPATH_PRODUCT_PRICE_ISTYLE, XPATH_COOKIES_BUTTON_ISTYLE)
+    #result_alza = scrape(CONFIG_ALZA, XPATH_PRODUCT_NAME_ALZA, XPATH_PRODUCT_PRICE_ALZA)
+    #print(results_istyle)
+    #print(result_alza)
+ 
