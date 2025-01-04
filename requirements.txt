@@ -1,3 +1,4 @@
 selenium
-flask
-pytest
+fastapi==0.100.0
+uvicorn==0.23.0
+sqlalchemy==2.0.20
