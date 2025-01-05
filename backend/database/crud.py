@@ -1,7 +1,7 @@
 from sqlalchemy import delete, func
 from sqlalchemy.orm import Session
 from datetime import datetime
-from . import models
+from models import Product
 
 def save_scraped_data(db: Session, scraped_data_multiple: dict):
 
@@ -12,7 +12,7 @@ def save_scraped_data(db: Session, scraped_data_multiple: dict):
         price_text = scraped_data['price']  
         price = float(price_text.replace(',-', '').replace(' ', '').replace('Kč', ''))
         
-        db_item = models.Product(
+        db_item = Product(
                 shop=scraped_data['shop'],
                 product_name=scraped_data['product_name'],
                 product_id=scraped_data['product_id'],
@@ -30,20 +30,20 @@ def save_scraped_data(db: Session, scraped_data_multiple: dict):
     return db_item
 
 def get_all_data(db: Session):
-    data = db.query(models.Product).all()
+    data = db.query(Product).all()
     # return data
     return [product.__dict__ for product in data]
 
 def delete_all_products(db: Session):
-    stmt = delete( models.Product)
+    stmt = delete(Product)
     db.execute(stmt)
     db.commit()
     print("Deleted")
        
 def delete_product_by_product_criteria(db: Session, product_id: int, date: datetime):
-    stmt = delete( models.Product).where(
-         models.Product.product_id == product_id,
-        models. Product.date < date
+    stmt = delete(Product).where(
+        Product.product_id == product_id,
+        Product.date < date
     )
     db.execute(stmt)
     db.commit()
@@ -52,9 +52,9 @@ def delete_product_by_product_criteria(db: Session, product_id: int, date: datet
 def check_product_exists(db: Session, product_id: int, date: datetime) -> bool:    
     check_date = date.date()
     
-    result = db.query(models.Product).filter(
-        models.Product.product_id == product_id,
-        func.date(models.Product.date) == check_date
+    result = db.query(Product).filter(
+        Product.product_id == product_id,
+        func.date(Product.date) == check_date
     ).first()
     
     return result is not None

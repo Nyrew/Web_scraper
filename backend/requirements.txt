@@ -1,4 +1,6 @@
 selenium
 fastapi==0.100.0
 uvicorn==0.23.0
-sqlalchemy==2.0.20
+SQLAlchemy==1.4.46
+psycopg2-binary==2.9.6
+python-dotenv

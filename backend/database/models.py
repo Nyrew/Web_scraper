@@ -6,7 +6,7 @@ Base = declarative_base()
 class Product(Base):
     __tablename__ = 'products'
     
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,  autoincrement=True)
     shop = Column(String(50), nullable=False)
     product_name = Column(String(255), nullable=False)
     product_id = Column(Integer, nullable=False)

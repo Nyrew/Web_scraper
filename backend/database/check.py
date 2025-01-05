@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
-from models import Product
-from database import engine
+from .models import Product
+from .database import engine
 
 
 def check():
