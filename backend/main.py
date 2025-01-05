@@ -3,7 +3,7 @@ from scraper.config import *
 from scraper.scraper import scrape
 from database.database import get_db, engine
 from database.models import Base
-from database.crud import save_scraped_data, get_all_data
+from backend.database.crud import save_scraped_data, get_all_data
 
 app = FastAPI()
 
