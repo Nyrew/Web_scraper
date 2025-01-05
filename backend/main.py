@@ -37,7 +37,7 @@ def main():
     for row in x:
         print(row)
 
-if __name__ == "__main__":   
+#if __name__ == "__main__":   
     #delete_all_products(next(get_db()))
     # main()
     # crea
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # main() 
     #print_all()
     #get_products()
-    main()
+    #main()
     #app.run(debug=True)
     #results_istyle = scrape(CONFIG_ISTYLE, XPATH_PRODUCT_NAME_ISTYLE, XPATH_PRODUCT_PRICE_ISTYLE, XPATH_COOKIES_BUTTON_ISTYLE)
     #result_alza = scrape(CONFIG_ALZA, XPATH_PRODUCT_NAME_ALZA, XPATH_PRODUCT_PRICE_ALZA)
