@@ -5,24 +5,30 @@ const istyleGrid = document.querySelector("#istyle .card-grid");
 scrapeButton.addEventListener("click", async () => {
     try {
         // Fetch data from backend
-        const response = await fetch("https://your-backend-url.onrender.com/scrape");
-        const data = await response.json();
+        const response = await fetch("https://web-scraper-ihnl.onrender.com/products");
+        const result = await response.json();
 
-        // Clear existing cards
-        alzaGrid.innerHTML = "";
-        istyleGrid.innerHTML = "";
+        if (result.status === "success") {
+            const data = result.data;
 
-        // Populate Alza cards
-        data.alza.forEach((product) => {
-            const card = createCard(product);
-            alzaGrid.appendChild(card);
-        });
+            // Clear existing cards
+            alzaGrid.innerHTML = "";
+            istyleGrid.innerHTML = "";
 
-        // Populate Istyle cards
-        data.istyle.forEach((product) => {
-            const card = createCard(product);
-            istyleGrid.appendChild(card);
-        });
+            // Populate Alza cards
+            data.alza.forEach((product) => {
+                const card = createCard(product);
+                alzaGrid.appendChild(card);
+            });
+
+            // Populate Istyle cards
+            data.istyle.forEach((product) => {
+                const card = createCard(product);
+                istyleGrid.appendChild(card);
+            });
+        } else {
+            alert("Error fetching products: " + result.message);
+        }
     } catch (error) {
         console.error("Error fetching data:", error);
         alert("Failed to fetch data. Please try again later.");

@@ -30,9 +30,34 @@ def save_scraped_data(db: Session, scraped_data_multiple: dict):
     return db_item
 
 def get_all_data(db: Session):
-    data = db.query(Product).all()
-    # return data
-    return [product.__dict__ for product in data]
+    filtered_data = (
+        db.query(Product)
+        .filter(Product.id >= 1, Product.id <= 7)
+        .all()
+    )
+
+    latest_data = {}
+    for product in filtered_data:
+        if product.id not in latest_data or product.date > latest_data[product.id].date:
+            latest_data[product.id] = product
+            
+    alza_data = []
+    istyle_data = []
+
+    for product in latest_data.values():
+        product_dict = {
+            "id": product.id,
+            "product_name": product.product_name,
+            "price": product.price,
+            "ram": product.ram,
+            "ssd": product.ssd
+        }
+        if product.shop == "alza":
+            alza_data.append(product_dict)
+        elif product.shop == "istyle":
+            istyle_data.append(product_dict)
+
+    return {"alza": alza_data, "istyle": istyle_data}
 
 def delete_all_products(db: Session):
     stmt = delete(Product)
