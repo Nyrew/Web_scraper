@@ -3,7 +3,7 @@ from scraper.config import *
 from scraper.scraper import scrape
 from database.database import get_db, engine
 from database.models import Base
-from backend.database.crud import save_scraped_data, get_all_data
+from database.crud import save_scraped_data, get_all_data
 
 app = FastAPI()
 
@@ -37,7 +37,7 @@ def main():
     for row in x:
         print(row)
 
-#if __name__ == "__main__":   
+#if __name__ == "__main__":  
     #delete_all_products(next(get_db()))
     # main()
     # crea

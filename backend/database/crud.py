@@ -1,7 +1,7 @@
 from sqlalchemy import delete, func
 from sqlalchemy.orm import Session
 from datetime import datetime
-from models import Product
+from database.models import Product
 
 def save_scraped_data(db: Session, scraped_data_multiple: dict):
 
