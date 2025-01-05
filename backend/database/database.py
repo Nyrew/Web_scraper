@@ -14,7 +14,7 @@ if not DATABASE_URL:
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    ssl_mode="require"
+    connect_args={"sslmode": "require"}
 )
 
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
