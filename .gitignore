@@ -4,3 +4,4 @@ data/*.json
 chromedriver/*
 *.log
 notes.md
+backend/database/*.db
