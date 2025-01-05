@@ -4,6 +4,12 @@ const istyleGrid = document.querySelector("#istyle .card-grid");
 
 scrapeButton.addEventListener("click", async () => {
     try {
+        
+        // Zavolej backend pro scraping
+        await fetch("https://web-scraper-ihnl.onrender.com/scrape", {
+            method: "POST",
+        });
+
         // Fetch data from backend
         const response = await fetch("https://web-scraper-ihnl.onrender.com/products");
         const result = await response.json();
