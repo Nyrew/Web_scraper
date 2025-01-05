@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-CHROMEDRIVER_PATH = "./backend/chromedriver/chromedriver"
+CHROMEDRIVER_PATH = "/usr/bin/chromium-driver"
 
 def scrape(
     configs: list, 
