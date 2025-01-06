@@ -1,17 +1,18 @@
 const scrapeButton = document.getElementById("scrape-button");
 const alzaGrid = document.querySelector("#alza .card-grid");
 const istyleGrid = document.querySelector("#istyle .card-grid");
+const backendUrl = process.env.BACKEND_URL
 
 scrapeButton.addEventListener("click", async () => {
     try {
         
         // Zavolej backend pro scraping
-        await fetch("https://web-scraper-ihnl.onrender.com/scrape", {
+        await fetch("${backendUrl}/scrape", {
             method: "POST",
         });
 
         // Fetch data from backend
-        const response = await fetch("https://web-scraper-ihnl.onrender.com/products");
+        const response = await fetch("${backendUrl}/products");
         const result = await response.json();
 
         if (result.status === "success") {
