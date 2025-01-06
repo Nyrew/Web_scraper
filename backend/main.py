@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from scraper.config import *
 from scraper.scraper import scrape
 from database.database import get_db, engine
-from database.models import Base
+from database.models import Base, Product
 from database.crud import save_scraped_data, get_all_data
+import datetime
 
 app = FastAPI()
 
@@ -60,3 +61,28 @@ def test_scrape():
 def test():
     text = "This is working"
     return text
+
+@app.get("/add")
+def add_product():
+    new_product = Product(
+        shop="Example Shop",
+        product_name="Example Product",
+        product_id=123456,
+        price=999.99,
+        url="https://example.com/product/123456",
+        ram="16GB",
+        gpu="NVIDIA GTX 3080",
+        ssd="512GB",
+        date=datetime.now()
+    )
+
+    try:
+        db = next(get_db())
+        db.add(new_product)
+        db.commit()
+        print("New product added successfully!")
+    except Exception as e:
+        print("Error:", e)
+        db.rollback()
+    finally:
+        db.close()
