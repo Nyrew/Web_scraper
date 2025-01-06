@@ -12,6 +12,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Instalace Chrome a ChromeDriver
 RUN apt-get update && apt-get install -y \
+    libgdk-pixbuf2.0-0 \
+    libxss1 \
+    libasound2 \
+    libnss3 \
+    fonts-liberation \
     wget \
     curl \
     unzip \
@@ -21,6 +26,9 @@ RUN apt-get update && apt-get install -y \
 
 # Nastavení environment variable pro Chrome
 ENV CHROMIUM_PATH=/usr/bin/chromium
+
+# Nastavení environment variable pro ChromeDriver
+ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
 
 # Nastavení prostředí pro headless režim
 ENV DISPLAY=:99
