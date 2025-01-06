@@ -4,8 +4,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
-CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
+#CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
 
 def scrape(
     configs: list, 
@@ -28,7 +29,10 @@ def scrape(
     updated_configs: list = configs.copy()
     cookie_clicked: bool = False
     
-    service = Service(executable_path=CHROMEDRIVER_PATH)
+    #service = Service(executable_path=CHROMEDRIVER_PATH)
+    
+    service = Service(executable_path=os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver"))
+    
     chrome_options = Options()
     
     chrome_options.add_argument("--headless=new")
@@ -38,6 +42,8 @@ def scrape(
     chrome_options.add_argument('--window-size=1920,1080')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+    
+    chrome_options.binary_location = os.getenv("CHROMIUM_PATH", "/usr/bin/chromium")
     
     driver = webdriver.Chrome(service=service, options=chrome_options)   
 

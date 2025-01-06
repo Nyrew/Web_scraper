@@ -1,7 +1,8 @@
 import requests
 
-url = "https://scraper-selenium.onrender.com/test-selenium"
-#url = "http://localhost:8000/scrape"
+#url = "https://web-scraper-ihnl.onrender.com/"
+url = "https://scraper-selenium.onrender.com/test-selenium" # docker - render
+#url = "http://localhost:8000/scrape" # docker - local
 
 try:
     response = requests.get(url)

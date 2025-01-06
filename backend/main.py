@@ -54,3 +54,9 @@ def test_scrape():
         )
     print(scraped_data_istyle)
     return {"status": "success", "data": scraped_data_istyle}
+
+
+@app.get("/test")
+def test():
+    text = "This is working"
+    return text
