@@ -7,11 +7,11 @@ scrapeButton.addEventListener("click", async () => {
     try {
         
         // Zavolej backend pro scraping
-        await fetch(`${backendUrl}/scrape`, {
+        await fetch("https://docker-selenium-swt8.onrender.com/scrape", {
             method: "POST",
         });
         // Fetch data from backend
-        const response = await fetch(`${backendUrl}/products`);
+        const response = await fetch("https://docker-selenium-swt8.onrender.com/products");
         const result = await response.json();
 
         if (result.status === "success") {
