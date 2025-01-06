@@ -41,3 +41,16 @@ def get_products():
         return {"status": "success", "data": products}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    
+    
+
+@app.get("/test-selenium")
+def test_scrape():
+    scraped_data_istyle = scrape(
+            CONFIG_ISTYLE,
+            XPATH_PRODUCT_NAME_ISTYLE,
+            XPATH_PRODUCT_PRICE_ISTYLE,
+            XPATH_COOKIES_BUTTON_ISTYLE
+        )
+    print(scraped_data_istyle)
+    return {"status": "success", "data": scraped_data_istyle}
