@@ -30,11 +30,11 @@ def scrape(
     cookie_clicked: bool = False
     
     # Selenium Grid URL (replace with your actual Docker/Selenium Grid URL)
-    selenium_url = "https://docker-selenium-swt8.onrender.com/wd/hub"  # Remote WebDriver URL
+    #selenium_url = "https://docker-selenium-swt8.onrender.com/wd/hub"  # Remote WebDriver URL
 
     #service = Service(executable_path=CHROMEDRIVER_PATH)
     
-    #service = Service(executable_path=os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver"))
+    service = Service(executable_path=os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver"))
     
     chrome_options = Options()
     
@@ -48,10 +48,7 @@ def scrape(
     
     chrome_options.binary_location = os.getenv("CHROMIUM_PATH", "/usr/bin/chromium")
     
-    driver = webdriver.Remote(
-        command_executor=selenium_url,
-        options=chrome_options
-    )
+    driver = webdriver.Chrome(service=service, options=chrome_options)  
 
     for config in updated_configs:
         try:
