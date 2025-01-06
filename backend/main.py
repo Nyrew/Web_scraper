@@ -4,7 +4,7 @@ from scraper.scraper import scrape
 from database.database import get_db, engine, DATABASE_URL
 from database.models import Base, Product
 from database.crud import save_scraped_data, get_all_data
-import datetime
+from datetime import datetime
 import psycopg2
 
 app = FastAPI()
