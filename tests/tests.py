@@ -1,6 +1,6 @@
 import requests
 
-url = "https://web-scraper-ihnl.onrender.com/add"
+url = "https://web-scraper-ihnl.onrender.com/test-selenium"
 #url = "https://docker-selenium-swt8.onrender.com/test-selenium" # docker - render
 #url = "http://localhost:8000/scrape" # docker - local
 
