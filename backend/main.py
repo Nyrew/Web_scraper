@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from scraper.config import *
 from scraper.scraper import scrape
-from database.database import get_db, engine
+from database.database import get_db, engine, DATABASE_URL
 from database.models import Base, Product
 from database.crud import save_scraped_data, get_all_data
 import datetime
+import psycopg2
 
 app = FastAPI()
 
@@ -86,3 +87,28 @@ def add_product():
         db.rollback()
     finally:
         db.close()
+
+@app.get("/get")
+def fetch_all_data():
+    try:
+        # Připojení k databázi
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
+
+        # SQL dotaz pro výběr všech dat
+        query = "SELECT * FROM products;"  # Přizpůsobte název tabulky
+        cursor.execute(query)
+
+        # Načtení všech řádků
+        rows = cursor.fetchall()
+
+        # Vypsání dat do konzole
+        for row in rows:
+            print(row)
+
+        # Zavření kurzoru a spojení
+        cursor.close()
+        conn.close()
+
+    except Exception as e:
+        print("Error:", e)
