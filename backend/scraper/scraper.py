@@ -10,7 +10,7 @@ import os
 #CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
 
 def scrape_single(
-    configs: dict, 
+    config: dict, 
     xpath_product_price: str, 
     xpath_cookies_button: str = None)  -> dict:
     """
@@ -25,7 +25,6 @@ def scrape_single(
         list: List of dictionaries containing scraped data with specifications
     """
     
-    updated_configs: list = configs.copy()
     cookie_clicked: bool = False
     
     # Selenium Grid URL (replace with your actual Docker/Selenium Grid URL)
@@ -49,39 +48,37 @@ def scrape_single(
     
     driver = webdriver.Chrome(service=service, options=chrome_options)  
 
-    for config in updated_configs:
-        try:
-            print(type(config))
-            driver.get(config['url'])
-            
-            if xpath_cookies_button and not cookie_clicked:
-                try:
-                    wait = WebDriverWait(driver, 2)
-                    cookie_button = wait.until(
-                        EC.element_to_be_clickable((By.XPATH, xpath_cookies_button))
-                    )
-                    cookie_button.click()
-                    cookie_clicked = True
-                except Exception as e:
-                    print(f"Failed to click cookies button: {e}")
-
-            price = driver.find_element(By.XPATH, xpath_product_price).text
-            #print(f"Product price: {price}")
-            print(type(price))
-            config['price'] = price#.replace(',-', '').replace('Kč', '').replace(' ', '')
-            
-        except Exception as e:
-            print(f"Error occurred while scraping: {e}")
+    try:
+        driver.get(config['url'])
+        
+        if xpath_cookies_button and not cookie_clicked:
+            try:
+                wait = WebDriverWait(driver, 2)
+                cookie_button = wait.until(
+                    EC.element_to_be_clickable((By.XPATH, xpath_cookies_button))
+                )
+                cookie_button.click()
+                cookie_clicked = True
+            except Exception as e:
+                print(f"Failed to click cookies button: {e}")
+        print("cena")
+        price = driver.find_element(By.XPATH, xpath_product_price).text
+        #print(f"Product price: {price}")
+        print(type(price))
+        config['price'] = price#.replace(',-', '').replace('Kč', '').replace(' ', '')
+        
+    except Exception as e:
+        print(f"Error occurred while scraping: {e}")
     
     driver.quit()
-    return updated_configs
+    return config
 
 def scrape_parallel(configs, price_xpath, xpath_cookies_button=None):
-    if xpath_cookies_button == None:
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            results = list(executor.map(lambda c: scrape_single(c, price_xpath), configs))
-        return results
-    else:
-        with ThreadPoolExecutor(max_workers=4) as executor: 
-            results = list(executor.map(lambda c: scrape_single(c, price_xpath, xpath_cookies_button), configs))
-        return results
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        results = list(
+            executor.map(
+                lambda c: scrape_single(c, price_xpath, xpath_cookies_button),
+                configs
+            )
+        )
+    return results
