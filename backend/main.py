@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from scraper.config import *
-from scraper.scraper import scrape_parallel
+from scraper.scraper import scrape_single
 from database.database import get_db, engine, DATABASE_URL
 from database.models import Base, Product
 from database.crud import save_scraped_data, get_all_data
@@ -18,13 +18,13 @@ def scrape_data():
     try:
         db = next(get_db())
         
-        scraped_data_istyle = scrape_parallel(
+        scraped_data_istyle = scrape_single(
             CONFIG_ISTYLE,
             XPATH_PRODUCT_PRICE_ISTYLE,
             XPATH_COOKIES_BUTTON_ISTYLE
         )
         print("scrape 1/2 completed")
-        scraped_data_alza = scrape_parallel(
+        scraped_data_alza = scrape_single(
             CONFIG_ALZA,
             XPATH_PRODUCT_PRICE_ALZA
         )
@@ -48,7 +48,7 @@ def get_products():
 
 @app.get("/test-selenium")
 def test_scrape():
-    scraped_data_istyle = scrape_parallel(
+    scraped_data_istyle = scrape_single(
             CONFIG_ISTYLE,
             XPATH_PRODUCT_PRICE_ISTYLE,
             XPATH_COOKIES_BUTTON_ISTYLE
