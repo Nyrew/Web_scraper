@@ -41,6 +41,10 @@ def scrape_single(
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--window-size=1920,1080')
+    chrome_options.add_argument('--disable-extensions')
+    chrome_options.add_argument('--disable-popup-blocking')
+    chrome_options.add_argument('--disable-browser-side-navigation')
+    chrome_options.add_argument('--disable-site-isolation-trials')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
     
@@ -50,10 +54,14 @@ def scrape_single(
 
     try:
         driver.get(config['url'])
+        WebDriverWait(driver, 10).until(
+            lambda d: d.execute_script("return document.readyState") == "complete"
+        )
+        print("Page loaded successfully")
         
         if xpath_cookies_button and not cookie_clicked:
             try:
-                wait = WebDriverWait(driver, 2)
+                wait = WebDriverWait(driver, 3)
                 cookie_button = wait.until(
                     EC.element_to_be_clickable((By.XPATH, xpath_cookies_button))
                 )
