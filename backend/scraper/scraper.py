@@ -11,7 +11,6 @@ import os
 
 def scrape_single(
     configs: list, 
-    xpath_product_name: str, 
     xpath_product_price: str, 
     xpath_cookies_button: str = None)  -> list:
     """
@@ -65,7 +64,6 @@ def scrape_single(
                     cookie_clicked = True
                 except Exception as e:
                     print(f"Failed to click cookies button: {e}")
-            
 
             price = driver.find_element(By.XPATH, xpath_product_price).text
             #print(f"Product price: {price}")
