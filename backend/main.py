@@ -20,14 +20,12 @@ def scrape_data():
         
         scraped_data_istyle = scrape_parallel(
             CONFIG_ISTYLE,
-            XPATH_PRODUCT_NAME_ISTYLE,
             XPATH_PRODUCT_PRICE_ISTYLE,
             XPATH_COOKIES_BUTTON_ISTYLE
         )
         print("scrape 1/2 completed")
         scraped_data_alza = scrape_parallel(
             CONFIG_ALZA,
-            XPATH_PRODUCT_NAME_ALZA,
             XPATH_PRODUCT_PRICE_ALZA
         )
         print("scrape 2/2 completed")
@@ -50,9 +48,8 @@ def get_products():
 
 @app.get("/test-selenium")
 def test_scrape():
-    scraped_data_istyle = scrape(
+    scraped_data_istyle = scrape_parallel(
             CONFIG_ISTYLE,
-            XPATH_PRODUCT_NAME_ISTYLE,
             XPATH_PRODUCT_PRICE_ISTYLE,
             XPATH_COOKIES_BUTTON_ISTYLE
         )

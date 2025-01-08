@@ -18,7 +18,6 @@ def scrape_single(
     
     Args:
         configs (list): List of dictionaries containing product configurations
-        xpath_name (str): XPath for product name element
         xpath_price (str): XPath for product price element
         xpath_cookies (str, optional): XPath for cookies button
         
