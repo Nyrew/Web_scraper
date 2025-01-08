@@ -10,9 +10,9 @@ import os
 #CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
 
 def scrape_single(
-    configs: list, 
+    configs: dict, 
     xpath_product_price: str, 
-    xpath_cookies_button: str = None)  -> list:
+    xpath_cookies_button: str = None)  -> dict:
     """
     Scrapes product information from Alza using provided configuration.
     
