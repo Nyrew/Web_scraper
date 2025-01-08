@@ -67,7 +67,7 @@ def scrape_single(
             price = driver.find_element(By.XPATH, xpath_product_price).text
             #print(f"Product price: {price}")
             
-            config['price'] = price.replace(',-', '').replace('Kč', '').replace(' ', '')
+            config['price'] = price#.replace(',-', '').replace('Kč', '').replace(' ', '')
             
         except Exception as e:
             print(f"Error occurred while scraping: {e}")
@@ -76,11 +76,9 @@ def scrape_single(
     return updated_configs
 
 def scrape_parallel(configs, price_xpath, xpath_cookies_button=None):
-    if xpath_cookies_button == None:
-        with ThreadPoolExecutor(max_workers=4) as executor: 
-            results = list(executor.map(lambda c: scrape_single(c, price_xpath), configs))
-        return results
-    else:
-        with ThreadPoolExecutor(max_workers=4) as executor: 
-            results = list(executor.map(lambda c: scrape_single(c, price_xpath, xpath_cookies_button), configs))
-        return results
+    def scrape_wrapper(config):
+        return scrape_single([config], price_xpath, xpath_cookies_button)
+    
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        results = list(executor.map(scrape_wrapper, configs))
+    return results
