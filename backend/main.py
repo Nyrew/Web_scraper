@@ -60,7 +60,7 @@ def test_scrape():
 
 @app.get("/test")
 def test():
-    text = "This is working"
+    text = "This is working22"
     return text
 
 @app.get("/add")
