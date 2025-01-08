@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from scraper.config import *
-from scraper.scraper import scrape
+from scraper.scraper import scrape_parallel
 from database.database import get_db, engine, DATABASE_URL
 from database.models import Base, Product
 from database.crud import save_scraped_data, get_all_data
@@ -18,17 +18,19 @@ def scrape_data():
     try:
         db = next(get_db())
         
-        scraped_data_istyle = scrape(
+        scraped_data_istyle = scrape_parallel(
             CONFIG_ISTYLE,
             XPATH_PRODUCT_NAME_ISTYLE,
             XPATH_PRODUCT_PRICE_ISTYLE,
             XPATH_COOKIES_BUTTON_ISTYLE
         )
-        scraped_data_alza = scrape(
+        print("scrape 1/2 completed")
+        scraped_data_alza = scrape_parallel(
             CONFIG_ALZA,
             XPATH_PRODUCT_NAME_ALZA,
             XPATH_PRODUCT_PRICE_ALZA
         )
+        print("scrape 2/2 completed")
         for item in scraped_data_istyle, scraped_data_alza:
             save_scraped_data(db, item)
         return {"status": "success", "message": "Data byla úspěšně uložena."}

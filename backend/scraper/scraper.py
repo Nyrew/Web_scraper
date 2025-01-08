@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -8,7 +9,7 @@ import os
 
 #CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
 
-def scrape(
+def scrape_single(
     configs: list, 
     xpath_product_name: str, 
     xpath_product_price: str, 
@@ -53,9 +54,10 @@ def scrape(
     for config in updated_configs:
         try:
             driver.get(config['url'])
-            wait = WebDriverWait(driver, 2)
+            
             if xpath_cookies_button and not cookie_clicked:
                 try:
+                    wait = WebDriverWait(driver, 2)
                     cookie_button = wait.until(
                         EC.element_to_be_clickable((By.XPATH, xpath_cookies_button))
                     )
@@ -64,22 +66,24 @@ def scrape(
                 except Exception as e:
                     print(f"Failed to click cookies button: {e}")
             
-            # Get product name
-            name = wait.until(
-                EC.presence_of_element_located((By.XPATH, xpath_product_name))
-            ).text
-            #print(f"Product name: {name}")
-        
-            # Get product price
-            price = wait.until(
-                EC.presence_of_element_located((By.XPATH, xpath_product_price))
-            ).text
+
+            price = driver.find_element(By.XPATH, xpath_product_price).text
             #print(f"Product price: {price}")
             
-            config['price'] = price.replace(',-', '')
+            config['price'] = price.replace(',-', '').replace('Kč', '').replace(' ', '')
             
         except Exception as e:
             print(f"Error occurred while scraping: {e}")
     
     driver.quit()
-    return updated_configs    
+    return updated_configs
+
+def scrape_parallel(configs, price_xpath, xpath_cookies_button=None):
+    if xpath_cookies_button == None:
+        with ThreadPoolExecutor(max_workers=4) as executor: 
+            results = list(executor.map(lambda c: scrape_single(c, price_xpath), configs))
+        return results
+    else:
+        with ThreadPoolExecutor(max_workers=4) as executor: 
+            results = list(executor.map(lambda c: scrape_single(c, price_xpath, xpath_cookies_button), configs))
+        return results
